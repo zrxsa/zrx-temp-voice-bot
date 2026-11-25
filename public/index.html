@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TempVoice Control Dashboard | لوحة التحكم</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                <div class="brand-info">
+                    <h2 id="brand-title">TempVoice</h2>
+                    <span class="badge live-badge"><i class="fa-solid fa-circle"></i> متصل الآن</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-item active" data-tab="overview">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>نظرة عامة</span>
+                </a>
+                <a href="#active-rooms" class="nav-item" data-tab="active-rooms">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>الرومات النشطة</span>
+                    <span class="counter-badge" id="active-rooms-count">0</span>
+                </a>
+                <a href="#master-channels" class="nav-item" data-tab="master-channels">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    <span>قنوات الإنشاء</span>
+                </a>
+                <a href="#logs" class="nav-item" data-tab="logs">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>سجلات الصندوق الأسود</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="bot-status">
+                    <div class="status-indicator"></div>
+                    <div class="status-details">
+                        <span class="status-name" id="bot-tag">TempVC Bot</span>
+                        <span class="status-ping" id="bot-ping">0ms</span>
+                    </div>
+                </div>
+                <div id="brand-footer" style="display: none; text-align: center; margin-top: 10px; font-size: 11px; color: var(--text-muted);"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1 id="current-page-title">نظرة عامة وإحصائيات البوت</h1>
+                    <p id="current-page-desc">متابعة وإدارة الرومات الصوتية المؤقتة في الوقت الفعلي</p>
+                </div>
+                <div class="top-actions">
+                    <button class="btn btn-refresh" id="manual-refresh-btn"><i class="fa-solid fa-rotate-right"></i> تحديث</button>
+                    <div class="uptime-box">
+                        <i class="fa-regular fa-clock"></i>
+                        <span>مدة التشغيل: <strong id="bot-uptime">0د</strong></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab 1: Overview -->
+            <section class="tab-content active" id="tab-overview">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple"><i class="fa-solid fa-walkie-talkie"></i></div>
+                        <div class="stat-details">
+                            <span class="stat-label">الرومات النشطة حالياً</span>
+                            <h3 class="stat-value" id="stat-active-channels">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
+                        <div class="stat-details">
+                            <span class="stat-label">المستخدمين في الصوت</span>
+                            <h3 class="stat-value" id="stat-active-users">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green"><i class="fa-solid fa-cube"></i></div>
+                        <div class="stat-details">
+                            <span class="stat-label">قنوات الإنشاء المعتمدة</span>
+                            <h3 class="stat-value" id="stat-master-channels">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon icon-orange"><i class="fa-solid fa-file-invoice"></i></div>
+                        <div class="stat-details">
+                            <span class="stat-label">إجمالي الأحداث المسجلة</span>
+                            <h3 class="stat-value" id="stat-total-events">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Live Channels Preview & Quick Activity Log -->
+                <div class="dashboard-widgets-grid">
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h3><i class="fa-solid fa-bolt"></i> الرومات الأكثر نشاطاً</h3>
+                            <a href="#active-rooms" class="view-all-link">عرض الكل</a>
+                        </div>
+                        <div class="widget-body" id="overview-rooms-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h3><i class="fa-solid fa-stream"></i> أحدث أنشطة الأعضاء</h3>
+                        </div>
+                        <div class="widget-body" id="overview-recent-logs">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: Active Rooms -->
+            <section class="tab-content" id="tab-active-rooms">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-rooms-input" placeholder="بحث باسم الروم أو المالك...">
+                    </div>
+                </div>
+
+                <div class="rooms-grid" id="rooms-cards-grid">
+                    <!-- Dynamic active channels cards -->
+                </div>
+            </section>
+
+            <!-- Tab 3: Master Channels -->
+            <section class="tab-content" id="tab-master-channels">
+                <!-- Add Master Channel Card Form -->
+                <div class="widget-card" style="margin-bottom: 24px;">
+                    <div class="widget-header">
+                        <h3><i class="fa-solid fa-plus-circle" style="color: var(--accent-purple);"></i> إضافة قناة إنشاء جديدة مباشرة من السيرفر</h3>
+                    </div>
+                    <form id="add-master-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: end;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>اختر القناة الصوتية الماستر:</label>
+                            <select id="master-channel-select" class="form-control">
+                                <option value="">جاري جلب القنوات الصوتية...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>أو أدخل معرف القناة (ID):</label>
+                            <input type="text" id="master-channel-id-input" class="form-control" placeholder="مثال: 123456789012345678">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>نوع الرومات من القناة:</label>
+                            <select id="master-type-select" class="form-control" required>
+                                <option value="owned">رومات تحكم خاصة بالمالك (Owned)</option>
+                                <option value="public">رومات عامة تلقائية (Public)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>قالب اسم الرومات (اختياري):</label>
+                            <input type="text" id="master-template-input" class="form-control" placeholder="مثال: 🎙️ | روم {user}">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" style="height: 42px; width: 100%;">
+                                <i class="fa-solid fa-floppy-disk"></i> تسجيل الماستر
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>اسم القناة</th>
+                                <th>السيرفر (Guild)</th>
+                                <th>النوع</th>
+                                <th>القالب المستخدم</th>
+                                <th>معرف القناة (ID)</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="master-channels-tbody">
+                            <!-- Dynamic rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Tab 4: Logs & Transcripts -->
+            <section class="tab-content" id="tab-logs">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-filter"></i>
+                        <input type="text" id="search-logs-input" placeholder="تصفية السجلات باسم العضو أو الإجراء...">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>الوقت</th>
+                                <th>نوع الحدث</th>
+                                <th>رقم الروم</th>
+                                <th>التفاصيل</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-tbody">
+                            <!-- Dynamic logs -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Interactive Action Modal (Rename, Limit, Kick) -->
+    <div class="modal-overlay" id="action-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">إجراء على الروم</h3>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="action-form">
+                    <input type="hidden" id="modal-channel-id">
+                    <input type="hidden" id="modal-action-type">
+                    
+                    <div class="form-group" id="modal-input-group">
+                        <label id="modal-input-label">القيمة الجديد:</label>
+                        <input type="text" id="modal-input-value" class="form-control" autocomplete="off">
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="modal-cancel-btn">إلغاء</button>
+                        <button type="submit" class="btn btn-primary" id="modal-submit-btn">تأكيد الإجراء</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

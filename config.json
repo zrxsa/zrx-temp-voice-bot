@@ -1,0 +1,25 @@
+{
+  "embedFooter": "zrx",
+  "panelTitle": "TempVoice Interface",
+  "panelDescription": "يمكنك استخدام **الأوامر** للتحكم في الروم الصوتي المؤقت الخاص بك. المزيد من الخيارات متاحة من خلال الأزرار أدناه:",
+  "panelColor": "#2B2D31",
+  "dashboardTitle": "TempVoice",
+  "dashboardPort": 6767,
+  "buttonEmojis": {
+    "topic": "#️⃣",
+    "waiting": "🕒",
+    "privacy": "🔒",
+    "limit": "👥",
+    "rename": "📝",
+    "region": "🌐",
+    "kick": "👢",
+    "invite": "📩",
+    "untrust": "💔",
+    "trust": "🤝",
+    "delete": "🗑️",
+    "transfer": "👑",
+    "claim": "✋",
+    "unban": "🔓",
+    "ban": "🚫"
+  }
+}

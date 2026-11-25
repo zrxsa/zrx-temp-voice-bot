@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# SQLite Databases & WAL files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
